@@ -6,5 +6,6 @@ using System.Web;
 
 namespace TpProject.Models.Data {
 	public class Db : DbContext {
+		public DbSet<PageDTO> Pages { get; set; }
 	}
 }
