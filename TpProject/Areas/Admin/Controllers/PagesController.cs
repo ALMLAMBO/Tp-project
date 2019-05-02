@@ -90,6 +90,7 @@ namespace TpProject.Areas.Admin.Controllers {
 			return View(model);
 		}
 
+		// POST: Admin/Pages/EditPage/id
 		[HttpPost]
 		public ActionResult EditPage(PageVM model) {
 			if(!ModelState.IsValid) {
@@ -133,6 +134,20 @@ namespace TpProject.Areas.Admin.Controllers {
 			TempData["SM"] = "You have edited the page!";
 
 			return RedirectToAction("EditPage");
+		}
+
+		//GET: Admin/Pages/PageDetails/id
+		public ActionResult PageDetails(int id) {
+			PageVM model;
+
+			using (Db db = new Db()) {
+				PageDTO dto = db.Pages.Find(id);
+				if(dto == null) {
+					return Content("The page does not exist.");
+				}
+				model = new PageVM(dto);
+			}
+			return View(model);
 		}
     }
 }
