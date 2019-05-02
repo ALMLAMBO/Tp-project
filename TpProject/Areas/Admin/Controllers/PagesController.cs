@@ -175,5 +175,32 @@ namespace TpProject.Areas.Admin.Controllers {
 				}
 			}
 		}
+
+		//GET: Admin/Pages/EditSidebar
+		[HttpGet]
+		public ActionResult EditSidebar() {
+			SidebarVM model;
+
+			using (Db db = new Db()) {
+				SidebarDTO dto = db.Sidebar.Find(1);
+				model = new SidebarVM(dto);
+			}
+
+			return View(model);
+		}
+
+		//POST: Admin/Pages/EditSidebar
+		[HttpPost]
+		public ActionResult EditSidebar(SidebarVM model) {
+			using (Db db = new Db()) {
+				SidebarDTO dto = db.Sidebar.Find(1);
+				dto.Body = model.Body;
+				db.SaveChanges();
+			}
+
+			TempData["SM"] = "You have edited the sidebar!";
+
+			return RedirectToAction("EditSidebar");
+		}
 	}
 }
