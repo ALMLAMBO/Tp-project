@@ -75,6 +75,7 @@ namespace TpProject.Areas.Admin.Controllers {
 		}
 
 		// GET: Admin/Pages/EditPage/id
+		[HttpGet]
 		public ActionResult EditPage(int id) {
 			PageVM model;
 
@@ -87,6 +88,51 @@ namespace TpProject.Areas.Admin.Controllers {
 				model = new PageVM(dto);
 			}
 			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult EditPage(PageVM model) {
+			if(!ModelState.IsValid) {
+				return View(model);
+			}
+
+			using (Db db = new Db()) {
+				int id = model.Id;
+				string slug = "home";
+
+				PageDTO dto = db.Pages.Find(id);
+				dto.Title = model.Title;
+				if(model.Slug != "home") {
+					if(string.IsNullOrWhiteSpace(model.Slug)) {
+						slug = model.Title
+							.Replace(" ", "-")
+							.ToLower();
+					}
+					else {
+						slug = model.Slug
+							.Replace(" ", "-")
+							.ToLower();
+					}
+				}
+
+				if(db.Pages.Where(x => x.Id != id)
+					.Any(x => x.Title == model.Title) 
+					|| db.Pages.Where(x => x.Id != id)
+					.Any(x => x.Slug == slug)) {
+
+					ModelState
+						.AddModelError("", "That title or slug already exists.");
+				}
+
+				dto.Slug = slug;
+				dto.Body = model.Body;
+				dto.HasSidebar = model.HasSidebar;
+
+				db.SaveChanges();
+			}
+			TempData["SM"] = "You have edited the page!";
+
+			return RedirectToAction("EditPage");
 		}
     }
 }
