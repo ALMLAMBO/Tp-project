@@ -22,5 +22,56 @@ namespace TpProject.Areas.Admin.Controllers {
 
 			return View(pagesList);
         }
+
+		// GET: Admin/Pages/AddPage
+		[HttpGet]
+		public ActionResult AddPage() {
+			return View();
+		}
+
+		// POST: Admin/Pages/AddPage
+		[HttpPost]
+		public ActionResult AddPage(PageVM model) {
+			if(!ModelState.IsValid) {
+				return View(model);
+			}
+
+			using (Db db = new Db()) {
+				string slug;
+				PageDTO dto = new PageDTO();
+				dto.Title = model.Title;
+
+				if(string.IsNullOrWhiteSpace(model.Slug)) {
+					slug = model.Title
+						.Replace(" ", "-")
+						.ToLower();
+				}
+				else {
+					slug = model.Slug
+						.Replace(" ", "-")
+						.ToLower();
+				}
+
+				if(db.Pages.Any(x => x.Title == model.Title) 
+					|| db.Pages.Any(x => x.Slug == slug)) {
+					ModelState
+						.AddModelError("", "That title or slug already exists");
+
+					return View(model);
+				}
+
+				dto.Slug = slug;
+				dto.Body = model.Body;
+				dto.HasSidebar = model.HasSidebar;
+				dto.Sorting = 100;
+
+				db.Pages.Add(dto);
+				db.SaveChanges();
+			}
+
+			TempData["SM"] = "You have added a new page";
+
+			return RedirectToAction("AddPage");
+		}
     }
 }
