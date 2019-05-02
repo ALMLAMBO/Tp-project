@@ -73,5 +73,20 @@ namespace TpProject.Areas.Admin.Controllers {
 
 			return RedirectToAction("AddPage");
 		}
+
+		// GET: Admin/Pages/EditPage/id
+		public ActionResult EditPage(int id) {
+			PageVM model;
+
+			using (Db db = new Db()) {
+				PageDTO dto = db.Pages.Find(id);
+				if(dto == null) {
+					return Content("The page does not exists.");
+				}
+
+				model = new PageVM(dto);
+			}
+			return View(model);
+		}
     }
 }
