@@ -164,6 +164,11 @@ namespace TpProject.Areas.Admin.Controllers {
 		[HttpPost]
 		public void ReorderPages(int [] id) {
 			using (Db db = new Db()) {
+				id = new int[db.Pages.ToArray().Length];
+				PageDTO [] dtos = db.Pages.ToArray();
+				for (int i = 0; i < dtos.Length; i++) {
+					id[i] = dtos[i].Id;
+				}
 				int count = 1;
 				PageDTO dto;
 
