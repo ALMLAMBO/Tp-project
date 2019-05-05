@@ -21,12 +21,13 @@ namespace TpProject.Areas.Admin.Controllers {
             return View(categoriesVMList);
         }
 
+		// GET: Admin/Shop/AddNewCategory
 		[HttpGet]
 		public ActionResult AddNewCategory() {
 			return View();
 		}
 
-		// GET: Admin/Shop/AddNewCategory
+		// POST: Admin/Shop/AddNewCategory
 		[HttpPost]
 		public ActionResult AddNewCategory(CategoryVM model) {
 			if(!ModelState.IsValid) {
