@@ -123,6 +123,8 @@ namespace TpProject.Areas.Admin.Controllers {
 
 					ModelState
 						.AddModelError("", "That title or slug already exists.");
+
+					return View(model);
 				}
 
 				dto.Slug = slug;
