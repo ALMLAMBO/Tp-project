@@ -41,22 +41,22 @@
     <script>
         $(function () {
 
-            $("a.delete").click(function () {
-                if (!confirm("Confirm page deletion")) {
-                    return false;
-                }
-            });
-
             $("table#pages tbody").sortable({
                 items: "tr:not(.home)",
                 placeholder: "ui-state-highlight",
                 update: function () {
                     var ids = $("table#pages tbody").sortable();
-                    var url = "/Admin/Pages/ReorderPages";
+                    var url = "/Admin/Shop/ReorderCategories";
 
                     $.post(url, ids, function (data) {
 
                     });
+                }
+            });
+
+            $("a.delete").click(function () {
+                if (!confirm("Confirm page deletion")) {
+                    return false;
                 }
             });
         });
