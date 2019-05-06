@@ -23,6 +23,7 @@
 
         @foreach (var item in Model) {
             <tr id="id_@item.Id">
+                <div class="ajaxdivtd"></div>
                 <td>
                     @Html.EditorFor(modelItem => item.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 </td>
@@ -60,6 +61,53 @@
                 if (!confirm("Confirm page deletion")) {
                     return false;
                 }
+            });
+
+            var originalTextBoxValue;
+            $("table#pages input.text-box").dblclick(function () {
+                originalTextBoxValue = $(this).val();
+                $(this).attr("readonly", false);
+            });
+
+            $("table#pages input.text-box").keyup(function (e) {
+                if (e.keyCode == 13) {
+                    $(this).blur();
+                    $(this).attr("readonly", true);
+                }
+            });
+
+            $("table#pages input.text-box").blur(function () {
+                var $this = $(this);
+                var ajaxdiv = $this.parent().find(".ajaxdivtd");
+                var newCatName = $(this).val();
+                var url = "/admin/shop/RenameCategory";
+                var id = $this.parent().parent()
+                    .attr("id").substring(3);
+
+                if (newCatName.length < 2) {
+                    $this.attr("readonly", true);
+                }
+
+                $.post(url, { newCatName: newCatName, id: id }, function (data) {
+                    var response = data.trim();
+
+                    if (response == "The category name has been taken.") {
+                        $this.val(originalTextBoxValue);
+                        ajaxdiv.html("<span class='alert alert-danger'>The category name has been taken.</span>");
+                    }
+                    else {
+                        ajaxdiv.html("<span class='alert alert-success'>The category name has been edited.</span>");
+                    }
+
+                    setTimeout(function () {
+                        ajaxdiv.fadeOut("fast", function () {
+                            ajaxdiv.html("");
+                        });
+                    }, 2000);
+
+                }).done(function () {
+                    $this.attr("readonly", true);
+                });
             });
         });
     </script>
