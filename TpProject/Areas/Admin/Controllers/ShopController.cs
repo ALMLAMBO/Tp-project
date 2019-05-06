@@ -56,5 +56,30 @@ namespace TpProject.Areas.Admin.Controllers {
 
 			return RedirectToAction("AddNewCategory");
 		}
-    }
+
+		// POST: Admin/Shop/ReorderCategories
+		[HttpPost]
+		public void ReorderCategories(int [] ids) {
+			using (Db db = new Db()) {
+				List<CategoryDTO> dtos = db.Categories.ToList();
+				ids = new int[dtos.Count];
+
+				for (int i = 0; i < dtos.Count; i++) {
+					ids[i] = dtos[i].Id;
+				}
+
+				dtos = null;
+
+				int count = 1;
+				CategoryDTO dto;
+				
+				foreach (int catId in ids) {
+					dto = db.Categories.Find(catId);
+					dto.Sorting = count;
+					db.SaveChanges();
+					count++;
+				}
+			}	
+		}
+	}
 }
