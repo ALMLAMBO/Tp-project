@@ -93,5 +93,52 @@ namespace TpProject.Areas.Admin.Controllers {
 
 			return RedirectToAction("Index");
 		}
+
+		// GET: Admin/Shop/RenameCategory/id
+		[HttpGet]
+		public ActionResult RenameCategory(int id) {
+			CategoryVM model;
+			using (Db db = new Db()) {
+				CategoryDTO dto = db.Categories.Find(id);
+				if(dto == null) {
+					return Content("The category does not exists.");
+				}
+
+				model = new CategoryVM(dto);
+			}
+			return View(model);
+		}
+
+		// POST: Admin/Shop/RenameCategory/id
+		[HttpPost]
+		public ActionResult RenameCategory(CategoryVM model) {
+			if(!ModelState.IsValid) {
+				return View(model);
+			}
+
+			using (Db db = new Db()) {
+				int id = model.Id;
+				string slug = "";
+
+				CategoryDTO dto = db.Categories.Find(id);
+				dto.Name = model.Name;
+				slug = model.Name.Replace(" ", "-").ToLower();
+
+				if(db.Categories
+					.Any(x => x.Name == model.Name)) {
+					ModelState
+						.AddModelError("", "The category name has been taken!");
+
+					return View(model);
+				}
+
+				dto.Slug = slug;
+				db.SaveChanges();
+			}
+
+			TempData["SM"] = "You have edited the category name!";
+
+			return RedirectToAction("RenameCategory");
+		}
 	}
 }
