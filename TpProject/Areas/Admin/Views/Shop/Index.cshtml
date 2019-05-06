@@ -20,7 +20,7 @@
         </tr>
 
         @foreach (var item in Model) {
-            <tr>
+            <tr id="id_@item.Id">
                 <td>
                     @Html.EditorFor(modelItem => item.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
                 </td>
