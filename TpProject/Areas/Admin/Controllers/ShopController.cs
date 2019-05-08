@@ -57,10 +57,6 @@ namespace TpProject.Areas.Admin.Controllers {
 			return RedirectToAction("AddNewCategory");
 		}
 
-		public ActionResult Delete() {
-			return View();
-		}
-
 		// POST: Admin/Shop/ReorderCategories
 		[HttpPost]
 		public void ReorderCategories(int [] ids) {
