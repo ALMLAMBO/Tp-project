@@ -9,5 +9,7 @@ namespace TpProject.Models.Data {
 		public DbSet<PageDTO> Pages { get; set; }
 		public DbSet<SidebarDTO> Sidebar { get; set; }
 		public DbSet<CategoryDTO> Categories { get; set; }
+		public DbSet<VideoDTO> Videos { get; set; }
+		public DbSet<CourseDTO> Courses { get; set; }
 	}
 }
