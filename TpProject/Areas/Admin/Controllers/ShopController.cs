@@ -7,9 +7,9 @@ using TpProject.Models.Data;
 using TpProject.Models.ViewModels.Shop;
 
 namespace TpProject.Areas.Admin.Controllers {
-    public class ShopController : Controller {
-        // GET: Admin/Shop/Index
-        public ActionResult Index() {
+	public class ShopController : Controller {
+		// GET: Admin/Shop/Index
+		public ActionResult Index() {
 			List<CategoryVM> categoriesVMList;
 			using (Db db = new Db()) {
 				categoriesVMList = db.Categories
@@ -18,8 +18,8 @@ namespace TpProject.Areas.Admin.Controllers {
 					.Select(x => new CategoryVM(x))
 					.ToList();
 			}
-            return View(categoriesVMList);
-        }
+			return View(categoriesVMList);
+		}
 
 		// GET: Admin/Shop/AddNewCategory
 		[HttpGet]
@@ -30,7 +30,7 @@ namespace TpProject.Areas.Admin.Controllers {
 		// POST: Admin/Shop/AddNewCategory
 		[HttpPost]
 		public ActionResult AddNewCategory(CategoryVM model) {
-			if(!ModelState.IsValid) {
+			if (!ModelState.IsValid) {
 				return View(model);
 			}
 
@@ -59,7 +59,7 @@ namespace TpProject.Areas.Admin.Controllers {
 
 		// POST: Admin/Shop/ReorderCategories
 		[HttpPost]
-		public void ReorderCategories(int [] ids) {
+		public void ReorderCategories(int[] ids) {
 			using (Db db = new Db()) {
 				List<CategoryDTO> dtos = db.Categories.ToList();
 				ids = new int[dtos.Count];
@@ -72,14 +72,14 @@ namespace TpProject.Areas.Admin.Controllers {
 
 				int count = 1;
 				CategoryDTO dto;
-				
+
 				foreach (int catId in ids) {
 					dto = db.Categories.Find(catId);
 					dto.Sorting = count;
 					db.SaveChanges();
 					count++;
 				}
-			}	
+			}
 		}
 
 		// GET: Admin/Shop/DeleteCategory/id
@@ -100,7 +100,7 @@ namespace TpProject.Areas.Admin.Controllers {
 			CategoryVM model;
 			using (Db db = new Db()) {
 				CategoryDTO dto = db.Categories.Find(id);
-				if(dto == null) {
+				if (dto == null) {
 					return Content("The category does not exists.");
 				}
 
@@ -112,7 +112,7 @@ namespace TpProject.Areas.Admin.Controllers {
 		// POST: Admin/Shop/RenameCategory/id
 		[HttpPost]
 		public ActionResult RenameCategory(CategoryVM model) {
-			if(!ModelState.IsValid) {
+			if (!ModelState.IsValid) {
 				return View(model);
 			}
 
@@ -124,7 +124,7 @@ namespace TpProject.Areas.Admin.Controllers {
 				dto.Name = model.Name;
 				slug = model.Name.Replace(" ", "-").ToLower();
 
-				if(db.Categories
+				if (db.Categories
 					.Any(x => x.Name == model.Name)) {
 					ModelState
 						.AddModelError("", "The category name has been taken!");
@@ -139,6 +139,18 @@ namespace TpProject.Areas.Admin.Controllers {
 			TempData["SM"] = "You have edited the category name!";
 
 			return RedirectToAction("RenameCategory");
+		}
+
+		[HttpGet]
+		public ActionResult AddCourse() {
+			CourseVM model = new CourseVM();
+
+			using (Db db = new Db()) {
+				model.Categories =
+					new SelectList(db.Categories.ToList(), "Id", "Name");
+			}
+
+			return View(model);
 		}
 	}
 }
