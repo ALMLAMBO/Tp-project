@@ -142,6 +142,7 @@ namespace TpProject.Areas.Admin.Controllers {
 		}
 
 		[HttpGet]
+		// GET: Admin/Shop/AddCourse
 		public ActionResult AddCourse() {
 			CourseVM model = new CourseVM();
 
@@ -151,6 +152,63 @@ namespace TpProject.Areas.Admin.Controllers {
 			}
 
 			return View(model);
+		}
+
+		// POST: Admin/Shop/AddCourse
+		public ActionResult AddCourse(CourseVM model
+			, HttpPostedFileBase file) {
+
+			if(!ModelState.IsValid) {
+				using (Db db = new Db()) {
+					model.Categories = 
+						new SelectList(db.Categories.ToList(),
+						"Id", "Name");
+
+					return View(model);
+				}
+			}
+
+			using (Db db = new Db()) {
+				if(db.Courses
+					.Any(x => x.Name == model.Name)) {
+
+					model.Categories =
+						new SelectList(db.Categories.ToList(),
+						"Id", "Name");
+
+					ModelState
+						.AddModelError("", "That course name is taken!");
+
+					return View(model);
+				}
+			}
+
+			int id = 0;
+
+			using (Db db = new Db()) {
+				CourseDTO course = new CourseDTO();
+
+				course.Name = model.Name;
+				course.Slug = model.Name
+					.Replace(" ", "-").ToLower();
+				course.Description = model.Description;
+				course.Price = model.Price;
+				course.CategoryId = model.CategoryId;
+
+				CategoryDTO catDTO = db.Categories
+					.FirstOrDefault(x => x.Id == model.CategoryId);
+
+				course.CategoryName = catDTO.Name;
+
+				db.Courses.Add(course);
+				db.SaveChanges();
+
+				id = course.Id;
+			}
+
+			TempData["SM"] = "You have added a new course!";
+
+			return RedirectToAction("AddCourse");
 		}
 	}
 }
