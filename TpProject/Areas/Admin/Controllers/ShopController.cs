@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Web;
+using PagedList;
 using System.Web.Mvc;
 using TpProject.Models.Data;
 using TpProject.Models.ViewModels.Shop;
@@ -279,6 +280,33 @@ namespace TpProject.Areas.Admin.Controllers {
 			TempData["SM"] = "You have added a new course!";
 
 			return RedirectToAction("AddCourse");
+		}
+
+		//GET: Admin/Shop/Courses
+		public ActionResult Courses(int? page, int? catId) {
+			List<CourseVM> listOfCoursesVM;
+			int pageNumber = page ?? 1;
+
+			using (Db db = new Db()) {
+				listOfCoursesVM = db.Courses
+					.ToArray()
+					.Where(x => catId == null 
+						|| catId == 0 || x.CategoryId == catId)
+					.Select(x => new CourseVM(x))
+					.ToList();
+
+				ViewBag.Categories = 
+					new SelectList(db.Categories.ToList(), "Id", "Name");
+
+				ViewBag.SelectedCat = catId.ToString();
+			}
+
+			var onePageOfCourses = listOfCoursesVM
+				.ToPagedList(pageNumber, 3);
+
+			ViewBag.OnePageOfCourses = onePageOfCourses;
+
+			return View(listOfCoursesVM);
 		}
 	}
 }
