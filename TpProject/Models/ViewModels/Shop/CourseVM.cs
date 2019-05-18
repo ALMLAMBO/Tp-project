@@ -20,7 +20,7 @@ namespace TpProject.Models.ViewModels.Shop {
 			Price = row.Price;
 			CategoryName = row.CategoryName;
 			CategoryId = row.CategoryId;
-			VideoId = row.VideoId;
+			VideoName = row.VideoName;
 		}
 
 		public int Id { get; set; }
@@ -33,9 +33,8 @@ namespace TpProject.Models.ViewModels.Shop {
 		public string CategoryName { get; set; }
 		[Required]
 		public int CategoryId { get; set; }
-		public int VideoId { get; set; }
+		public string VideoName { get; set; }
 
-		public IEnumerable<SelectListItem> Categories { get; set; }
-		public IEnumerable<string> VideoGallery { get; set; }
+		public IEnumerable<SelectListItem> Categories { get; set; } 
 	}
 }
