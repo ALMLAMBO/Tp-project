@@ -12,7 +12,7 @@
     </div>
 }
 
-@using (Html.BeginForm("AddProduct", "Shop",
+@using (Html.BeginForm("AddCourse", "Shop",
     FormMethod.Post, new { enctype = "multipart/form-data" })) {
 
     @Html.AntiForgeryToken()
@@ -58,7 +58,7 @@
             <div class="col-md-10">
                 <input type="file" name="file" id="VideoUpload" />
                 <video controls="controls">
-                    <source src="#" type="video/mp4" />
+                    <source src="#" type="video/*" />
                 </video>
             </div>
         </div>
