@@ -21,6 +21,7 @@ namespace TpProject.Models.ViewModels.Shop {
 			CategoryName = row.CategoryName;
 			CategoryId = row.CategoryId;
 			VideoName = row.VideoName;
+			CreatedAt = row.CreatedAt;
 		}
 
 		public int Id { get; set; }
@@ -34,6 +35,7 @@ namespace TpProject.Models.ViewModels.Shop {
 		[Required]
 		public int CategoryId { get; set; }
 		public string VideoName { get; set; }
+		public DateTime CreatedAt { get; set; }
 
 		public IEnumerable<SelectListItem> Categories { get; set; } 
 	}

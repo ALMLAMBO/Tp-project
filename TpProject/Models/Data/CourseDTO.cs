@@ -17,6 +17,7 @@ namespace TpProject.Models.Data {
 		public string CategoryName { get; set; }
 		public int CategoryId { get; set; }
 		public string VideoName { get; set; }
+		public DateTime CreatedAt { get; set; }
 
 		[ForeignKey("CategoryId")]
 		public virtual CategoryDTO Category { get; set; }
