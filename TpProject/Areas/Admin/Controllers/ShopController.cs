@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -155,6 +158,7 @@ namespace TpProject.Areas.Admin.Controllers {
 		}
 
 		// POST: Admin/Shop/AddCourse
+		[HttpPost]
 		public ActionResult AddCourse(CourseVM model
 			, HttpPostedFileBase file) {
 
@@ -191,6 +195,7 @@ namespace TpProject.Areas.Admin.Controllers {
 				course.Name = model.Name;
 				course.Slug = model.Name
 					.Replace(" ", "-").ToLower();
+
 				course.Description = model.Description;
 				course.Price = model.Price;
 				course.CategoryId = model.CategoryId;
@@ -205,6 +210,71 @@ namespace TpProject.Areas.Admin.Controllers {
 
 				id = course.Id;
 			}
+
+			#region Upload Video
+				DirectoryInfo originalDirectory = 
+				new DirectoryInfo(string.Format("{0}Courses\\", 
+				Server.MapPath("~/")));
+
+				string pathString1 = Path
+					.Combine(originalDirectory.ToString() + "\\" + model.Name);
+
+				string pathString2 = Path
+					.Combine(originalDirectory.ToString() + 
+					model.Name + "\\Chapters");
+
+				if(!Directory.Exists(pathString1)) {
+					Directory.CreateDirectory(pathString1);
+				}
+
+				if (!Directory.Exists(pathString2)) {
+					Directory.CreateDirectory(pathString2);
+				}
+
+				if (file != null && file.ContentLength > 0) {
+					string extension = file.ContentType.ToLower();
+					if(extension != "video/mp4") {
+						using (Db db = new Db()) {
+							model.Categories = new SelectList(
+								db.Categories.ToList(), "Id", "Name");
+
+							ModelState
+								.AddModelError("", "The video was not uploaded - wrong video format");
+
+							return View(model);
+						}
+					}
+				}
+
+				string videoName = file.FileName;
+				using (Db db = new Db()) {
+					CourseDTO dto = db.Courses.Find(id);
+					dto.VideoName = videoName;
+					db.SaveChanges();
+				}
+
+			string path = string.Format("{0}\\{1}", pathString1, videoName);
+			
+			if(file.ContentLength < 999999999) {
+				file.SaveAs(path);
+
+				string mainconn = ConfigurationManager
+					.ConnectionStrings["Db"]
+					.ConnectionString;
+
+				SqlConnection sqlconn = new SqlConnection(mainconn);
+				string sqlquery =
+					"UPDATE [dbo].[tblCourses] SET VideoName = @VideoName WHERE Id = @Id";
+
+				SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn);
+
+				sqlconn.Open();
+				sqlcomm.Parameters.AddWithValue("@VideoName", videoName);
+				sqlcomm.Parameters.AddWithValue("@Id", id);
+				sqlcomm.ExecuteNonQuery();
+				sqlconn.Close();
+			}
+			#endregion
 
 			TempData["SM"] = "You have added a new course!";
 
