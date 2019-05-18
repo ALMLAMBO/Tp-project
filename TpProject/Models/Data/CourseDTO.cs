@@ -16,11 +16,9 @@ namespace TpProject.Models.Data {
 		public decimal Price { get; set; }
 		public string CategoryName { get; set; }
 		public int CategoryId { get; set; }
-		public int VideoId { get; set; }
+		public string VideoName { get; set; }
 
 		[ForeignKey("CategoryId")]
 		public virtual CategoryDTO Category { get; set; }
-		[ForeignKey("VideoId")]
-		public virtual VideoDTO Video { get; set; }
 	}
 }
