@@ -9,70 +9,73 @@
 
 <h2>Courses</h2>
 
+<p>
+    @Html.ActionLink("Add new course", "AddCourse")
+</p>
+
 <select id="SelectCategory" name="SelectCategory">
     <option value="0">All</option>
     @foreach (var item in ViewBag.Categories) {
         if (ViewBag.SelectedCat == item.Value) {
             <option selected="selected" value="@item.Value">@item.Text</option>
-        } 
-        else {
+        } else {
             <option value="@item.Value">@item.Text</option>
         }
     }
 </select>
 <br /><br />
 
-<p>
-    @Html.ActionLink("Add new course", "AddCourse")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            Name
-        </th>
-        <th>
-            Description
-        </th>
-        <th>
-            Price
-        </th>
-        <th></th>
-        <th>
-            Introduction Video
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var course in ViewBag.OnePageOfCourses) {
+@if (!Model.Any()) {
+    <h1 class="text-center text-uppercase">There are no courses!</h1>
+} else {
+    <table class="table">
         <tr>
-            <td>
-            <td>
-                @course.Name
-            </td>
-            <td>
-                @course.Description
-            </td>
-            <td>
-                $@course.Price
-            </td>
-            <td>
-                <video controls="controls" width="384" height="216">
-                    <source src="~/Courses/@course.Name/@course.VideoName" type="video/mp4" />
-                </video>
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "EditCourse", new { id = course.Id }) |
-                @Html.ActionLink("Details", "CourseDetails", new { id = course.Id }) |
-                @Html.ActionLink("Delete", "DeleteCourse", new { id = course.Id }, new { @class = "delete" })
-            </td>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+            <th>
+                Introduction Video
+            </th>
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var course in ViewBag.OnePageOfCourses) {
+            <tr>
+                <td>
+                <td>
+                    @course.Name
+                </td>
+                <td>
+                    @course.Description
+                </td>
+                <td>
+                    $@course.Price
+                </td>
+                <td>
+                    <video controls="controls" width="384" height="216">
+                        <source src="~/Courses/@course.Name/@course.VideoName" type="video/mp4" />
+                    </video>
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditCourse", new { id = course.Id }) |
+                    @Html.ActionLink("Details", "CourseDetails", new { id = course.Id }) |
+                    @Html.ActionLink("Delete", "DeleteCourse", new { id = course.Id }, new { @class = "delete" })
+                </td>
+            </tr>
+        }
+    </table>
 
-@Html.PagedListPager((IPagedList)ViewBag.OnePageOfCourses, 
-    page => Url.Action("Courses", new { page, catId = ViewBag.SelectedCat }))
+    @Html.PagedListPager((IPagedList)ViewBag.OnePageOfCourses,
+        page => Url.Action("Courses", new { page, catId = ViewBag.SelectedCat }))
 
+}
 @section Scripts {
     <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
     <script>
