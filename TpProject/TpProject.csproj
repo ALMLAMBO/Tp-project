@@ -162,6 +162,8 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Courses\test 2\COSTA RICA IN 4K 60fps HDR %28ULTRA HD%29.mp4" />
+    <Content Include="Courses\test 3\COSTA RICA IN 4K 60fps HDR %28ULTRA HD%29.mp4" />
     <Content Include="Courses\test\COSTA RICA IN 4K 60fps HDR %28ULTRA HD%29.mp4" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -188,6 +190,7 @@
     <Content Include="Areas\Admin\Views\Shop\RenameCategory.cshtml" />
     <Content Include="Areas\Admin\Views\Shop\AddCourse.cshtml" />
     <Content Include="Areas\Admin\Views\Shop\Courses.cshtml" />
+    <Content Include="Areas\Admin\Views\Shop\EditCourse.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\ckeditor\ckeditor.php" />
     <Content Include="Scripts\ckeditor\ckeditor_basic.js" />
@@ -559,6 +562,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Courses\test 2\Chapters\" />
+    <Folder Include="Courses\test 3\Chapters\" />
     <Folder Include="Courses\test\Chapters\" />
   </ItemGroup>
   <ItemGroup>
