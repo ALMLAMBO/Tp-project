@@ -200,6 +200,7 @@ namespace TpProject.Areas.Admin.Controllers {
 				course.Description = model.Description;
 				course.Price = model.Price;
 				course.CategoryId = model.CategoryId;
+				course.CreatedAt = DateTime.Now;
 
 				CategoryDTO catDTO = db.Categories
 					.FirstOrDefault(x => x.Id == model.CategoryId);
@@ -301,12 +302,33 @@ namespace TpProject.Areas.Admin.Controllers {
 				ViewBag.SelectedCat = catId.ToString();
 			}
 
-			var onePageOfCourses = listOfCoursesVM
-				.ToPagedList(pageNumber, 3);
+			IPagedList<CourseVM> onePageOfCourses 
+				= listOfCoursesVM.ToPagedList(pageNumber, 3);
 
 			ViewBag.OnePageOfCourses = onePageOfCourses;
 
 			return View(listOfCoursesVM);
+		}
+
+		//GET: Admin/Shop/EditCourse/id
+		[HttpGet]
+		public ActionResult EditCourse(int id) {
+			CourseVM model;
+
+			using (Db db = new Db()) {
+				CourseDTO dto = db.Courses.Find(id);
+
+				if (dto == null) {
+					return Content("The course does not exists.");
+				}
+
+				model = new CourseVM(dto);
+
+				model.Categories = new SelectList(
+					db.Categories.ToList(), "Id", "Name");
+			}
+
+			return View(model);
 		}
 	}
 }
