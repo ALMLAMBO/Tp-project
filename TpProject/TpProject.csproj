@@ -163,7 +163,6 @@
     <Content Include="Content\img\ajax-loader.gif" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Courses\test 2\COSTA RICA IN 4K 60fps HDR %28ULTRA HD%29.mp4" />
-    <Content Include="Courses\test 3\COSTA RICA IN 4K 60fps HDR %28ULTRA HD%29.mp4" />
     <Content Include="Courses\test\COSTA RICA IN 4K 60fps HDR %28ULTRA HD%29.mp4" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -563,7 +562,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Courses\test 2\Chapters\" />
-    <Folder Include="Courses\test 3\Chapters\" />
     <Folder Include="Courses\test\Chapters\" />
   </ItemGroup>
   <ItemGroup>
