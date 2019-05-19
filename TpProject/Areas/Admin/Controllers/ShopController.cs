@@ -255,27 +255,27 @@ namespace TpProject.Areas.Admin.Controllers {
 					db.SaveChanges();
 				}
 
-			string path = string.Format("{0}\\{1}", pathString1, videoName);
-			
-			if(file.ContentLength < 999999999) {
-				file.SaveAs(path);
+				string path = string.Format("{0}\\{1}", pathString1, videoName);
+				
+				if(file.ContentLength < 999999999) {
+					file.SaveAs(path);
 
-				string mainconn = ConfigurationManager
-					.ConnectionStrings["Db"]
-					.ConnectionString;
+					string mainconn = ConfigurationManager
+						.ConnectionStrings["Db"]
+						.ConnectionString;
 
-				SqlConnection sqlconn = new SqlConnection(mainconn);
-				string sqlquery =
-					"UPDATE [dbo].[tblCourses] SET VideoName = @VideoName WHERE Id = @Id";
+					SqlConnection sqlconn = new SqlConnection(mainconn);
+					string sqlquery =
+						"UPDATE [dbo].[tblCourses] SET VideoName = @VideoName WHERE Id = @Id";
 
-				SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn);
+					SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn);
 
-				sqlconn.Open();
-				sqlcomm.Parameters.AddWithValue("@VideoName", videoName);
-				sqlcomm.Parameters.AddWithValue("@Id", id);
-				sqlcomm.ExecuteNonQuery();
-				sqlconn.Close();
-			}
+					sqlconn.Open();
+					sqlcomm.Parameters.AddWithValue("@VideoName", videoName);
+					sqlcomm.Parameters.AddWithValue("@Id", id);
+					sqlcomm.ExecuteNonQuery();
+					sqlconn.Close();
+				}
 			#endregion
 
 			TempData["SM"] = "You have added a new course!";
@@ -329,6 +329,110 @@ namespace TpProject.Areas.Admin.Controllers {
 			}
 
 			return View(model);
+		}
+
+		//POST: Admin/Shop/EditCourse/id
+		[HttpPost]
+		public ActionResult EditCourse(CourseVM model, 
+			HttpPostedFileBase file) {
+
+			int id = model.Id;
+
+			using (Db db = new Db()) {
+				model.Categories = 
+					new SelectList(db.Categories.ToList(),
+					"Id", "Name");
+			}
+
+			if(!ModelState.IsValid) {
+				return View(model);
+			}
+
+			using (Db db = new Db()) {
+				if(db.Courses.Where(x => x.Id != id)
+					.Any(x => x.Name == model.Name)) {
+
+					ModelState
+						.AddModelError("", "The course name is taken!");
+
+					return View(model);
+				}
+			}
+
+			using (Db db = new Db()) {
+				CourseDTO dto = db.Courses.Find(id);
+
+				dto.Name = model.Name;
+				dto.Slug = model.Name
+					.Replace(" ", "-").ToLower();
+
+				dto.Description = model.Description;
+				dto.Price = model.Price;
+				dto.CategoryId = model.CategoryId;
+				dto.VideoName = model.VideoName;
+
+				CategoryDTO catDTO = db.Categories
+					.FirstOrDefault(x => x.Id == model.CategoryId);
+
+				dto.CategoryName = catDTO.Name;
+
+				db.SaveChanges();
+			}
+
+			TempData["SM"] = "You have edited the course!";
+
+			#region Upload Video
+				if(file != null && file.ContentLength > 0) {
+					string extension = file.ContentType.ToLower();
+					
+					if(extension != "video/mp4") {
+						ModelState
+						.AddModelError("", 
+						"The video was not uploaded - wrong video format!");
+
+						return View(model);
+					}
+
+				DirectoryInfo originalDirectory =
+				new DirectoryInfo(string.Format("{0}Courses\\",
+				Server.MapPath("~/")));
+
+				string pathString1 = Path
+					.Combine(originalDirectory.ToString() +
+						"\\" + model.Name);
+
+				DirectoryInfo di1 = new DirectoryInfo(pathString1);
+
+				foreach (FileInfo file2 in di1.GetFiles()) {
+					file2.Delete();
+				}
+
+				string videoName = file.FileName;
+				string path = string.Format("{0}\\{1}", pathString1, videoName);
+
+				if (file.ContentLength < 999999999) {
+					file.SaveAs(path);
+
+					string mainconn = ConfigurationManager
+						.ConnectionStrings["Db"]
+						.ConnectionString;
+
+					SqlConnection sqlconn = new SqlConnection(mainconn);
+					string sqlquery =
+						"UPDATE [dbo].[tblCourses] SET VideoName = @VideoName WHERE Id = @Id";
+
+					SqlCommand sqlcomm = new SqlCommand(sqlquery, sqlconn);
+
+					sqlconn.Open();
+					sqlcomm.Parameters.AddWithValue("@VideoName", videoName);
+					sqlcomm.Parameters.AddWithValue("@Id", id);
+					sqlcomm.ExecuteNonQuery();
+					sqlconn.Close();
+				}
+			}
+			#endregion
+
+			return RedirectToAction("EditCourse");
 		}
 	}
 }
