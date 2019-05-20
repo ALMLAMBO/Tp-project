@@ -434,5 +434,41 @@ namespace TpProject.Areas.Admin.Controllers {
 
 			return RedirectToAction("EditCourse");
 		}
+
+		//GET: Admin/Shop/DeleteCourse/id
+		public ActionResult DeleteCourse(int id) {
+			CourseVM model;
+
+			using (Db db = new Db()) {
+				CourseDTO dto = db.Courses.Find(id);
+				model = new CourseVM(dto);
+
+				db.Courses.Remove(dto);
+				db.SaveChanges();
+			}
+
+			DirectoryInfo originalDirectory = 
+				new DirectoryInfo(string.Format("{0}Courses\\",
+				Server.MapPath("~/")));
+
+			string pathString1 = Path
+				.Combine(originalDirectory.ToString() 
+				+ model.Name);
+
+			string path = string
+				.Format("{0}\\{1}", pathString1, model.VideoName);
+
+			string pathString3 = Path
+					.Combine(originalDirectory.ToString() +
+					model.Name + "\\Chapters");
+
+			if (Directory.Exists(pathString1)) {
+				Directory.Delete(pathString1, true);
+				DirectoryInfo info = new DirectoryInfo(pathString1);
+				info.Delete();
+			}
+			 
+			return RedirectToAction("Courses");
+		}
 	}
 }
