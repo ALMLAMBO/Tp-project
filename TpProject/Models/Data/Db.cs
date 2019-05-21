@@ -10,5 +10,8 @@ namespace TpProject.Models.Data {
 		public DbSet<SidebarDTO> Sidebar { get; set; }
 		public DbSet<CategoryDTO> Categories { get; set; }
 		public DbSet<CourseDTO> Courses { get; set; }
+		public DbSet<ChapterDTO> Chapters { get; set; }
+		public DbSet<FileDTO> Files { get; set; }
+		public DbSet<ChaptersForCoursesDTO> ChaptersForCourses { get; set; }
 	}
 }
