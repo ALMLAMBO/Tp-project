@@ -435,6 +435,20 @@ namespace TpProject.Areas.Admin.Controllers {
 			return RedirectToAction("EditCourse");
 		}
 
+		public ActionResult CourseDetails(int id) {
+			CourseVM model;
+
+			using (Db db = new Db()) {
+				CourseDTO dto = db.Courses.Find(id);
+				if(dto == null) {
+					return Content("The course does not exitsts");
+				}
+				model = new CourseVM(dto);
+			}
+
+			return View(model);
+		}
+
 		//GET: Admin/Shop/DeleteCourse/id
 		public ActionResult DeleteCourse(int id) {
 			CourseVM model;
