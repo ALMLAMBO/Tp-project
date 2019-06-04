@@ -128,5 +128,22 @@ namespace TpProject.Controllers {
 
 			return PartialView(model);
 		}
+
+		// GET: /account/user-profile
+		[HttpGet]
+		[ActionName("user-profile")]
+		public ActionResult UserProfile() {
+			string username = User.Identity.Name;
+			UserProfileVM model;
+
+			using (Db db = new Db()) {
+				UserDTO dto = db.Users
+					.FirstOrDefault(x => x.Username == username);
+
+				model = new UserProfileVM(dto);
+			}
+
+			return View("UserProfile", model);
+		}
 	}
 }
