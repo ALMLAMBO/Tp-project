@@ -111,5 +111,22 @@ namespace TpProject.Controllers {
 			FormsAuthentication.SignOut();
 			return Redirect("~/account/login");
 		}
+
+		public ActionResult UserNavPartial() {
+			string username = User.Identity.Name;
+			UserNavPartialVM model;
+
+			using (Db db = new Db()) {
+				UserDTO dto = db.Users
+					.FirstOrDefault(x => x.Username == username);
+
+				model = new UserNavPartialVM() {
+					FirstName = dto.FirstName,
+					LastName = dto.LastName
+				};
+			}
+
+			return PartialView(model);
+		}
 	}
 }
