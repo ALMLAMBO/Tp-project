@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using TpProject.Models.Data;
 using TpProject.Models.ViewModels.Account;
 
@@ -68,6 +69,7 @@ namespace TpProject.Controllers {
 		}
 
 		// GET: /account/login
+		[HttpGet]
 		public ActionResult Login() {
 			string username = User.Identity.Name;
 
@@ -76,6 +78,38 @@ namespace TpProject.Controllers {
 			}
 
 			return View();
+		}
+
+		// POST: /account/login
+		[HttpPost]
+		public ActionResult Login(LoginUserVM model) {
+			if (!ModelState.IsValid) {
+				return View(model);
+			}
+
+			bool isValid = false;
+
+			using (Db db = new Db()) {
+				if (db.Users.Any(x => x.Username.Equals(model.Username) 
+					&& x.Password.Equals(model.Password))) {
+					isValid = true;
+				}
+			}
+
+			if (!isValid) {
+				ModelState.AddModelError("", "Invalid username or password.");
+				return View(model);
+			} 
+			else {
+				FormsAuthentication.SetAuthCookie(model.Username, model.RememberMe);
+				return Redirect(FormsAuthentication.GetRedirectUrl(model.Username, model.RememberMe));
+			}
+		}
+
+		// GET: /account/Logout
+		public ActionResult Logout() {
+			FormsAuthentication.SignOut();
+			return Redirect("~/account/login");
 		}
 	}
 }
