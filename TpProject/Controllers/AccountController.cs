@@ -8,7 +8,7 @@ namespace TpProject.Controllers {
     public class AccountController : Controller {
         // GET: Account
         public ActionResult Index() {
-            return View();
+            return Redirect("~/account/login");
         }
 
 		// GET: account/create-account
@@ -16,5 +16,16 @@ namespace TpProject.Controllers {
 		public ActionResult CreateAccount() {
 			return View("CreateAccount");
 		}
-    }
+
+		// GET: /account/login
+		public ActionResult Login() {
+			string username = User.Identity.Name;
+
+			if (!string.IsNullOrEmpty(username)) {
+				return RedirectToAction("user-profile");
+			}
+
+			return View();
+		}
+	}
 }
