@@ -19,6 +19,13 @@ namespace TpProject {
 				);
 
 			routes.MapRoute(
+					name: "SidebarPartial",
+					url: "Pages/SidebarPartial",
+					defaults: new { controller = "Pages", action = "SidebarPartial" },
+					new[] { "TpProject.Controllers" }
+				);
+
+			routes.MapRoute(
 				name: "PagesMenuPartial", 
 				url: "Pages/PagesMenuPartial", 
 				defaults: new { controller = "Pages", action = "PagesMenuPartial" },
