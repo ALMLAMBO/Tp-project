@@ -151,7 +151,10 @@
     <Compile Include="Models\Data\Db.cs" />
     <Compile Include="Models\Data\FileDTO.cs" />
     <Compile Include="Models\Data\PageDTO.cs" />
+    <Compile Include="Models\Data\RoleDTO.cs" />
     <Compile Include="Models\Data\SidebarDTO.cs" />
+    <Compile Include="Models\Data\UserDTO.cs" />
+    <Compile Include="Models\Data\UserRoleDTO.cs" />
     <Compile Include="Models\ViewModels\Pages\PageVM.cs" />
     <Compile Include="Models\ViewModels\Pages\SidebarVM.cs" />
     <Compile Include="Models\ViewModels\Shop\CategoryVM.cs" />
@@ -198,6 +201,8 @@
     <Content Include="Areas\Admin\Views\Shop\AddCourse.cshtml" />
     <Content Include="Areas\Admin\Views\Shop\Courses.cshtml" />
     <Content Include="Areas\Admin\Views\Shop\EditCourse.cshtml" />
+    <Content Include="Areas\Admin\Views\Chapter\AddChapter.cshtml" />
+    <Content Include="Areas\Admin\Views\Shop\CourseDetails.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\ckeditor\ckeditor.php" />
     <Content Include="Scripts\ckeditor\ckeditor_basic.js" />
@@ -569,7 +574,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\Admin\Views\Chapter\" />
     <Folder Include="Courses\test\Chapters\" />
   </ItemGroup>
   <ItemGroup>
