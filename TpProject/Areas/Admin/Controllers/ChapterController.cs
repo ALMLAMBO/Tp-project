@@ -8,7 +8,8 @@ using TpProject.Models.Data;
 using System.IO;
 
 namespace TpProject.Areas.Admin.Controllers {
-    public class ChapterController : Controller {
+	[Authorize(Roles = "Admin")]
+	public class ChapterController : Controller {
 
 		//GET: Admin/Chapter/Chapters
 		public ActionResult Chapters() {

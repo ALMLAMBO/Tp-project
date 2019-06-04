@@ -5,7 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 
 namespace TpProject.Areas.Admin.Controllers {
-    public class DashboardController : Controller {
+	[Authorize(Roles = "Admin")]
+	public class DashboardController : Controller {
         // GET: Admin/Dashboard
         public ActionResult Index() {
             return View();

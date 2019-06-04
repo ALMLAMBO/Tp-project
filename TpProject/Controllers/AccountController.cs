@@ -107,11 +107,13 @@ namespace TpProject.Controllers {
 		}
 
 		// GET: /account/Logout
+		[Authorize]
 		public ActionResult Logout() {
 			FormsAuthentication.SignOut();
 			return Redirect("~/account/login");
 		}
 
+		[Authorize]
 		public ActionResult UserNavPartial() {
 			string username = User.Identity.Name;
 			UserNavPartialVM model;
@@ -149,6 +151,7 @@ namespace TpProject.Controllers {
 		// POST: /account/user-profile
 		[HttpPost]
 		[ActionName("user-profile")]
+		[Authorize]
 		public ActionResult UserProfile(UserProfileVM model) {
 			if (!ModelState.IsValid) {
 				return View("UserProfile", model);

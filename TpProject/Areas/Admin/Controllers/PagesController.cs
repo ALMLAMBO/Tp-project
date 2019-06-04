@@ -7,7 +7,8 @@ using TpProject.Models.Data;
 using TpProject.Models.ViewModels.Pages;
 
 namespace TpProject.Areas.Admin.Controllers {
-    public class PagesController : Controller {
+	[Authorize(Roles = "Admin")]
+	public class PagesController : Controller {
         // GET: Admin/Pages
         public ActionResult Index() {
 			List<PageVM> pagesList;

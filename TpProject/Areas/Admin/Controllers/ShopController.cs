@@ -11,6 +11,7 @@ using TpProject.Models.Data;
 using TpProject.Models.ViewModels.Shop;
 
 namespace TpProject.Areas.Admin.Controllers {
+	[Authorize(Roles = "Admin")]
 	public class ShopController : Controller {
 		// GET: Admin/Shop/Index
 		public ActionResult Index() {
