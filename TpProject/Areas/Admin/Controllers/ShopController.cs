@@ -158,6 +158,17 @@ namespace TpProject.Areas.Admin.Controllers {
 			return View(model);
 		}
 
+		public static int getCourseId(int chapterId) {
+			int id = 0;
+
+			using (Db db = new Db()) {
+				id = db.ChaptersForCourses
+					.Find(chapterId).CourseId;
+			}
+
+			return id;
+		}
+
 		// POST: Admin/Shop/AddCourse
 		[HttpPost]
 		public ActionResult AddCourse(CourseVM model
@@ -216,7 +227,7 @@ namespace TpProject.Areas.Admin.Controllers {
 			#region Upload Video
 				DirectoryInfo originalDirectory = 
 				new DirectoryInfo(string.Format("{0}Courses\\", 
-				Server.MapPath("~/")));
+				Server.MapPath(@"\")));
 
 				string pathString1 = Path
 					.Combine(originalDirectory.ToString() + "\\" + model.Name);
@@ -395,7 +406,7 @@ namespace TpProject.Areas.Admin.Controllers {
 
 				DirectoryInfo originalDirectory =
 				new DirectoryInfo(string.Format("{0}Courses\\",
-				Server.MapPath("~/")));
+				Server.MapPath(@"\")));
 
 				string pathString1 = Path
 					.Combine(originalDirectory.ToString() +
@@ -463,7 +474,7 @@ namespace TpProject.Areas.Admin.Controllers {
 
 			DirectoryInfo originalDirectory = 
 				new DirectoryInfo(string.Format("{0}Courses\\",
-				Server.MapPath("~/")));
+				Server.MapPath(@"\")));
 
 			string pathString1 = Path
 				.Combine(originalDirectory.ToString() 
@@ -478,8 +489,6 @@ namespace TpProject.Areas.Admin.Controllers {
 
 			if (Directory.Exists(pathString1)) {
 				Directory.Delete(pathString1, true);
-				DirectoryInfo info = new DirectoryInfo(pathString1);
-				info.Delete();
 			}
 			 
 			return RedirectToAction("Courses");
