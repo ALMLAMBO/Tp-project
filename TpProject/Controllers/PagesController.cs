@@ -42,5 +42,21 @@ namespace TpProject.Controllers {
 
 			return View(model);
         }
-    }
+
+		[Route("Pages/PagesMenuPartial")]
+		public ActionResult PagesMenuPartial() {
+			List<PageVM> pageVMList;
+
+			using (Db db = new Db()) {
+				pageVMList = db.Pages
+					.ToArray()
+					.OrderBy(x => x.Sorting)
+					.Where(x => x.Slug != "home")
+					.Select(x => new PageVM(x))
+					.ToList();
+			}
+
+			return PartialView(pageVMList);
+		}
+	}
 }
