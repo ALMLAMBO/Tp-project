@@ -35,6 +35,8 @@
                         }
                     }
 
+                    @Html.Action("SidebarPartial", "Pages")
+
                     @if (Request.IsAuthenticated) {
                         <li>@Html.Action("UserNavPartial", "Account", new { area = "" })</li>
                     }
