@@ -1,19 +1,22 @@
 ﻿@model TpProject.Models.ViewModels.Shop.ChapterVM
 
+@using TpProject.Models.Data;
+
 @{
+    Db db = new Db();
     ViewBag.Title = "Add Chapter";
-    //ViewBag.ChapterId = Model.Id;
+    ChaptersForCoursesDTO dto = db.ChaptersForCourses.Find(Model.Id);
 }
 
 <h2>Add Chapter</h2>
 
 @if (TempData["SM"] != null) {
-    <div class="alert alert-success">
-        @TempData["SM"]
-    </div>
+<div class="alert alert-success">
+    @TempData["SM"]
+</div>
 }
 
-@using (Html.BeginForm(Html.BeginForm("AddCourse", "Shop",
+@using (Html.BeginForm(Html.BeginForm("AddChapter", "Chapter",
     FormMethod.Post, new { enctype = "multipart/form-data" }))) {
     @Html.AntiForgeryToken()
 
@@ -31,18 +34,8 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="control-label col-md-2" for="HasSidebar">Category</label>
-            <div class="col-md-10">
-                <select id="SelectCategory" name="SelectCategory">
-                    <option value="0">All</option>
-
-                </select>
             </div>
         </div>
 
@@ -55,5 +48,6 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    <h1 class="text-uppercase">Fix this</h1>
+    @Html.Action("CourseDetails", "Shop", new { id = dto.CourseId })
 </div>
