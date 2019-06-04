@@ -17,6 +17,12 @@ namespace TpProject {
 					id = UrlParameter.Optional}, new[] { "TpProject.Controllers" }
 				);
 
+			routes.MapRoute(
+				name: "PagesMenuPartial", 
+				url: "Pages/PagesMenuPartial", 
+				defaults: new { controller = "Pages", action = "PagesMenuPartial" },
+				new[] { "CmsShoppingCart.Controllers" });
+
 			//	routes.MapRoute(
 			//		name: "Default",
 			//		url: "{controller}/{action}/{id}",
