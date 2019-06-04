@@ -13,5 +13,8 @@ namespace TpProject.Models.Data {
 		public DbSet<ChapterDTO> Chapters { get; set; }
 		public DbSet<FileDTO> Files { get; set; }
 		public DbSet<ChaptersForCoursesDTO> ChaptersForCourses { get; set; }
+		public DbSet<UserDTO> Users { get; set; }
+		public DbSet<RoleDTO> Roles { get; set; }
+		public DbSet<UserRoleDTO> UserRoles { get; set; }
 	}
 }
