@@ -59,6 +59,7 @@ namespace TpProject.Controllers {
 			return PartialView(pageVMList);
 		}
 
+		[Route("Pages/SidebarPartial")]
 		public ActionResult SidebarPartial() { 
 			SidebarVM model;
 
