@@ -1,0 +1,100 @@
+﻿@model TpProject.Models.ViewModels.Shop.CourseVM
+@using TpProject.Models.Data;
+
+@{
+    ViewBag.Title = "Course Details";
+    Db db = new Db();
+    ViewBag.Chapters = db.ChaptersForCourses
+        .Where(x => x.CourseId == Model.Id)
+        .ToList();
+}
+
+<h2>Course Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            Category
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedAt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedAt)
+        </dd>
+
+        <dt>
+            Course Video
+        </dt>
+
+        <dl>
+            <video controls="controls" width="384" height="216">
+                <source src="~/Courses/@Model.Name/@Model.VideoName" type="video/mp4" />
+            </video>
+        </dl>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Add new chapter", "AddChapter", "Chapter")
+</p>
+
+@if (ViewBag.Chapters == null) {
+    <h1 class="text-uppercase text-center">
+        There are no chapters for this course
+    </h1>
+} else {
+    <table>
+        @foreach (ChaptersForCoursesDTO item in ViewBag.Chapters) {
+            <tr>
+                <td>
+                    @item.Chapter.Name
+                </td>
+                <td>
+                    @item.Chapter.Description
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditChapter", "Chapter") |
+                    @Html.ActionLink("Details", "ChapterDetails", "Chapter") |
+                    @Html.ActionLink("Delete", "DeleteChapter", "Chapter")
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+<p>
+    @Html.ActionLink("Edit", "EditCourse", new { id = Model.Id }) |
+    @Html.ActionLink("Back to Courses", "Courses")
+</p>
