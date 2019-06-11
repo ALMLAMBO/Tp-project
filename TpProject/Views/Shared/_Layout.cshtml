@@ -49,6 +49,7 @@
                     if (ViewBag.Title != "Cart Details") {
                         <ul class="navbar-collapse collapse navbar-right">
                             @{
+                                /*https://stackoverflow.com/questions/6086529/how-to-check-user-is-logged-in*/
                                 bool checkForLoggedInUser = System.Web.HttpContext
                                     .Current.User.Identity.IsAuthenticated &&
                                     (System.Web.HttpContext.Current.User != null) &&
