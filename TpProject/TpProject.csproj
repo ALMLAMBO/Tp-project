@@ -592,6 +592,8 @@
     <Content Include="Views\Shop\CategoryMenuPartial.cshtml" />
     <Content Include="Views\Cart\AddToCartPartial.cshtml" />
     <Content Include="Views\Cart\Index.cshtml" />
+    <Content Include="Views\Cart\PaypalPartial.cshtml" />
+    <Content Include="Views\Account\Orders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
