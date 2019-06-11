@@ -43,7 +43,6 @@ namespace TpProject.Controllers {
 			return View(model);
         }
 
-		[Route("Pages/PagesMenuPartial")]
 		public ActionResult PagesMenuPartial() {
 			List<PageVM> pageVMList;
 
@@ -59,7 +58,6 @@ namespace TpProject.Controllers {
 			return PartialView(pageVMList);
 		}
 
-		[Route("Pages/SidebarPartial")]
 		public ActionResult SidebarPartial() { 
 			SidebarVM model;
 
