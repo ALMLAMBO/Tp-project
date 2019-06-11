@@ -42,17 +42,35 @@ namespace TpProject.Controllers {
 				courseVMList = db.Courses
 					.ToArray()
 					.Where(x => x.CategoryId == catId)
-					.Select(x => new CourseVM(x))
+					.Select(x => new CourseVM(x) { Id = x.Id })
 					.ToList();
 
 				var courseCat = db.Courses
 					.Where(x => x.CategoryId == catId)
 					.FirstOrDefault();
-
-				ViewBag.CategoryName = courseCat.CategoryName;
 			}
 
 			return View(courseVMList);
+		}
+
+		[ActionName("course-details")]
+		public ActionResult CourseDetails(string name) {
+			CourseDTO dto;
+			CourseVM model;
+			
+			using(Db db = new Db()) {
+				if (!db.Courses.Any(x => x.Slug.Equals(name))) {
+					return RedirectToAction("Index", "Shop");
+				}
+
+				dto = db.Courses
+					.Where(x => x.Slug == name)
+					.FirstOrDefault();
+
+				model = new CourseVM(dto);
+			}
+
+			return View("CourseDetails", model);
 		}
 	}
 }
