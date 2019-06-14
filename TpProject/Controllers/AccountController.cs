@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -8,11 +10,11 @@ using TpProject.Models.Data;
 using TpProject.Models.ViewModels.Account;
 
 namespace TpProject.Controllers {
-    public class AccountController : Controller {
-        // GET: Account
-        public ActionResult Index() {
-            return Redirect("~/account/login");
-        }
+	public class AccountController : Controller {
+		// GET: Account
+		public ActionResult Index() {
+			return Redirect("~/account/login");
+		}
 
 		// GET: account/create-account
 		[ActionName("create-account")]
@@ -41,12 +43,16 @@ namespace TpProject.Controllers {
 					return View("CreateAccount", model);
 				}
 
+				var sha256 = new SHA256Managed();
+				var bytes = UTF8Encoding.UTF8.GetBytes(model.Password);
+				var hash = sha256.ComputeHash(bytes);
+
 				UserDTO userDTO = new UserDTO() {
 					FirstName = model.FirstName,
 					LastName = model.LastName,
 					EmailAddress = model.EmailAddress,
 					Username = model.Username,
-					Password = model.Password
+					Password = Convert.ToBase64String(hash)
 				};
 
 				db.Users.Add(userDTO);
@@ -87,11 +93,16 @@ namespace TpProject.Controllers {
 				return View(model);
 			}
 
+			var sha256 = new SHA256Managed();
+			var bytes = UTF8Encoding.UTF8.GetBytes(model.Password);
+			var hash = sha256.ComputeHash(bytes);
+			string password = Convert.ToBase64String(hash);
+
 			bool isValid = false;
 
 			using (Db db = new Db()) {
-				if (db.Users.Any(x => x.Username.Equals(model.Username) 
-					&& x.Password.Equals(model.Password))) {
+				if (db.Users.Any(x => x.Username.Equals(model.Username)
+					&& x.Password.Equals(password))) {
 					isValid = true;
 				}
 			}
@@ -99,8 +110,7 @@ namespace TpProject.Controllers {
 			if (!isValid) {
 				ModelState.AddModelError("", "Invalid username or password.");
 				return View(model);
-			} 
-			else {
+			} else {
 				FormsAuthentication.SetAuthCookie(model.Username, model.RememberMe);
 				return Redirect(FormsAuthentication.GetRedirectUrl(model.Username, model.RememberMe));
 			}
@@ -173,7 +183,7 @@ namespace TpProject.Controllers {
 					.Any(x => x.Username == username)) {
 
 					ModelState
-						.AddModelError("", "Username " 
+						.AddModelError("", "Username "
 						+ model.Username + " already exists.");
 
 					model.Username = "";
@@ -189,7 +199,10 @@ namespace TpProject.Controllers {
 				dto.Username = model.Username;
 
 				if (!string.IsNullOrWhiteSpace(model.Password)) {
-					dto.Password = model.Password;
+					var sha256 = new SHA256Managed();
+					var bytes = UTF8Encoding.UTF8.GetBytes(model.Password);
+					var hash = sha256.ComputeHash(bytes);
+					dto.Password = Convert.ToBase64String(hash);
 				}
 
 				db.SaveChanges();
@@ -198,6 +211,21 @@ namespace TpProject.Controllers {
 			TempData["SM"] = "You have edited your profile!";
 
 			return Redirect("~/account/user-profile");
+		}
+
+		[HttpGet]
+		public ActionResult DeleteAccount(string username) {
+			using (Db db = new Db()) {
+				if(username != "admin") {
+					UserDTO dto = db.Users.Find(username);
+					db.Users.Remove(dto);
+					db.SaveChanges();
+				}
+				else {
+					return Content("Could not delete admin account");
+				}
+			}
+			return RedirectToAction("Index");
 		}
 	}
 }
