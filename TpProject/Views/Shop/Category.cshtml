@@ -11,6 +11,9 @@
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
+        <th>
+            Course video
+        </th>
         <th></th>
     </tr>
 
@@ -18,6 +21,14 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            <video controls="controls" width="384" height="216">
+                <source src="~/Courses/@item.Name/@item.VideoName" type="video/mp4" />
+            </video>
+        </td>
+        <td>
+            @Html.ActionLink("More Details", "course-details", "shop", new { id = item.Name })
         </td>
     </tr>
 }
