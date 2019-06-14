@@ -13,8 +13,8 @@ using TpProject.Models.ViewModels.Shop;
 namespace TpProject.Areas.Admin.Controllers {
 	[Authorize(Roles = "Admin")]
 	public class ShopController : Controller {
-		// GET: Admin/Shop/Index
-		public ActionResult Index() {
+		// GET: Admin/Shop/Categories
+		public ActionResult Categories() {
 			List<CategoryVM> categoriesVMList;
 			using (Db db = new Db()) {
 				categoriesVMList = db.Categories
