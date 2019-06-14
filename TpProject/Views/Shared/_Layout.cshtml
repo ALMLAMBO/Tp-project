@@ -6,6 +6,10 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <style>
+        .adminarea {
+        }
+    </style>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-topcancel">
@@ -38,29 +42,35 @@
                             <li>@Html.Action("UserNavPartial", "Account", new { area = "" })</li>
                         }
                     }
-                </ul>
 
+                    @if (Request.IsAuthenticated || User.IsInRole("Admin")) {
+                        <li class="right adminarea">
+                            <ul class="navbar-collapse collapse navbar-right">
+                                <li class="right">
+                                    @Html.ActionLink("Admin Area", "Index", "Dashboard", new { area = "Admin", @class = "active" }, null) 
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                </ul>
                 @if (Request.IsAuthenticated && User.IsInRole("Admin")) {
                     <ul class="navbar-collapse collapse navbar-right adminarea">
                         <li>@Html.ActionLink("Admin Area", "Index", "Dashboard", new { area = "Admin" }, null) </li>
                     </ul>
-                } 
-                else {
-                    if (ViewBag.Title != "Cart Details") {
-                        <ul class="navbar-collapse collapse navbar-right">
-                            @{
-                                /*https://stackoverflow.com/questions/6086529/how-to-check-user-is-logged-in*/
-                                bool checkForLoggedInUser = System.Web.HttpContext
-                                    .Current.User.Identity.IsAuthenticated &&
-                                    (System.Web.HttpContext.Current.User != null) &&
-                                    User.IsInRole("User");
+                } else {
+                    <ul class="navbar-collapse collapse navbar-right">
+                        @{
+                            /*https://stackoverflow.com/questions/6086529/how-to-check-user-is-logged-in*/
+                            bool checkForLoggedInUser = System.Web.HttpContext
+                                .Current.User.Identity.IsAuthenticated &&
+                                (System.Web.HttpContext.Current.User != null) &&
+                                User.IsInRole("User");
 
-                                if(checkForLoggedInUser) {
-                                    @Html.Action("CartPartial", "Cart")
-                                }
+                            if (checkForLoggedInUser) {
+                                @Html.Action("CartPartial", "Cart")
                             }
-                        </ul>
-                    }
+                        }
+                    </ul>
                 }
             </div>
         </div>
