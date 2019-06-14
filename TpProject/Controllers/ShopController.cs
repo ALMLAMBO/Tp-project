@@ -55,7 +55,6 @@ namespace TpProject.Controllers {
 
 		[ActionName("course-details")]
 		public ActionResult CourseDetails(string name) {
-			CourseDTO dto;
 			CourseVM model;
 			
 			using(Db db = new Db()) {
@@ -63,7 +62,7 @@ namespace TpProject.Controllers {
 					return RedirectToAction("Index", "Shop");
 				}
 
-				dto = db.Courses
+				CourseDTO dto = db.Courses
 					.Where(x => x.Slug == name)
 					.FirstOrDefault();
 
